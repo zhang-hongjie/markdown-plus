@@ -51,6 +51,17 @@ const registerToolBarEvents = () => {
     editor.focus()
   })
 
+  // color icons
+  $('.color-icon').click((event) => {
+    const modifier = $(event.currentTarget).data('modifier')
+    if (!editor.somethingSelected()) {
+      const word = editor.findWordAt(editor.getCursor())
+      editor.setSelection(word.anchor, word.head)
+    }
+    editor.replaceSelection('<' + modifier + '>' + editor.getSelection() + '</' + modifier + '>')
+    editor.focus()
+  })
+
   // <hr/>
   $('#horizontal-rule').click(() => {
     const cursor = editor.getCursor()

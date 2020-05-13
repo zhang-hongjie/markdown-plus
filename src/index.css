@@ -97,6 +97,66 @@ html, body, .CodeMirror {
   font-size: 80%;
 }
 
+bred {
+  color: black;
+  background-color: red;
+  border: 1px solid red;
+}
+
+bgreen {
+  color: black;
+  background-color: green;
+  border: 1px solid green;
+}
+
+byellow {
+  color: black;
+  background-color: yellow;
+  border: 1px solid yellow;
+}
+
+fred {
+  font-weight: bold;
+  color: red;
+}
+
+fgreen {
+  font-weight: bold;
+  color: green;
+}
+
+fblue {
+  font-weight: bold;
+  color: blue;
+}
+
+.fa-text:before {
+  content: "\F893";
+}
+
+#BgRed {
+  background-color: red;
+}
+
+#BgGreen {
+  background-color: green;
+}
+
+#BgYellow {
+  background-color: yellow;
+}
+
+#FgRed {
+  color: red;
+}
+
+#FgGreen {
+  color: green;
+}
+
+#FgBlue {
+  color: blue;
+}
 
 /*************************/
 /* below is for printing */
