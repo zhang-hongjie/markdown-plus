@@ -1,48 +1,146 @@
-const { dialog, app, BrowserWindow } = require('electron');
-const path = require('path');
+const electron = require('electron')
+const { app, BrowserWindow, Menu } = require('electron')
+const path = require('path')
+
+// Keep a global reference of the window object, if you don't, the window will
+// be closed automatically when the javascript object is garbage collected.
+let mainWindow
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
-  app.quit();
+  app.quit()
 }
 
 const createWindow = () => {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
-  });
+  mainWindow = new BrowserWindow(
+    { width: 800, height: 600, webPreferences: { nodeIntegration: true } })
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  mainWindow.webContents.openDevTools()
 
   // and load the index.html of the app.
-  // dialog.log(__dirname);
-  mainWindow.loadFile(path.join(__dirname, '../dist/index.html'));
-  console.log(__dirname);
-};
+  mainWindow.loadFile(path.join(__dirname, '../dist/index.html'))
+  // and load the index.html of the app.
+  // mainWindow.loadURL('file://' + __dirname + '/index.html');
+}
+
+const createApplicationMenu = () => {
+  var application_menu = [
+    {
+      label: 'menu1',
+      submenu: [
+        {
+          label: 'Undo',
+          accelerator: 'CmdOrCtrl+Z',
+          role: 'undo'
+        },
+        {
+          label: 'Open',
+          accelerator: 'CmdOrCtrl+O',
+          click: () => {
+            electron.dialog.showOpenDialog(
+              { properties: ['openFile', 'openDirectory', 'multiSelections'] })
+          }
+        },
+        {
+          label: 'submenu1',
+          submenu: [
+            {
+              label: 'item1',
+              accelerator: 'CmdOrCtrl+A',
+              click: () => {
+                mainWindow.openDevTools()
+              }
+            },
+            {
+              label: 'item2',
+              accelerator: 'CmdOrCtrl+B',
+              click: () => {
+                mainWindow.closeDevTools()
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+  if (process.platform == 'darwin') {
+    const name = app.getName()
+    application_menu.unshift({
+      label: name,
+      submenu: [
+        {
+          label: 'About ' + name,
+          role: 'about'
+        },
+        {
+          type: 'separator'
+        },
+        {
+          label: 'Services',
+          role: 'services',
+          submenu: []
+        },
+        {
+          type: 'separator'
+        },
+        {
+          label: 'Hide ' + name,
+          accelerator: 'Command+H',
+          role: 'hide'
+        },
+        {
+          label: 'Hide Others',
+          accelerator: 'Command+Shift+H',
+          role: 'hideothers'
+        },
+        {
+          label: 'Show All',
+          role: 'unhide'
+        },
+        {
+          type: 'separator'
+        },
+        {
+          label: 'Quit',
+          accelerator: 'Command+Q',
+          click: () => {
+            app.quit()
+          }
+        },
+      ]
+    })
+  }
+
+  menu = Menu.buildFromTemplate(application_menu)
+  Menu.setApplicationMenu(menu)
+}
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', createWindow);
+app.on('ready', function () {
+  createWindow();
+  createApplicationMenu();
+})
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
   // On OS X it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== 'darwin') {
-    app.quit();
+    app.quit()
   }
-});
+})
 
 app.on('activate', () => {
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (BrowserWindow.getAllWindows().length === 0) {
-    createWindow();
+    createWindow()
   }
-});
+})
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
