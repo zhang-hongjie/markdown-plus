@@ -4,3 +4,5 @@ todo.md
 *.bundle.js
 *.log
 *.bundle.css
+
+out/

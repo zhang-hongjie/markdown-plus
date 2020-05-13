@@ -59,6 +59,17 @@ yarn watch
 open dist/index.html in your browser
 ```
 
+## Electron run
+
+```
+yarn start
+```
+
+## Electron package to mac osx DMG
+
+```
+yarn make
+```
 
 ## How to use Markdown Plus in your projects
 

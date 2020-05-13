@@ -1,21 +1,19 @@
 {
   "name": "markdown-plus",
+  "productName": "markdown-plus",
   "version": "2.5.2",
   "description": "Markdown editor with extra features",
-  "main": "index.js",
+  "main": "src/main.js",
   "scripts": {
     "upgrade": "node_modules/.bin/yarn-upgrade-all && yarn remove jquery && yarn add jquery@2.2.4",
     "build": "node -r babel-register node_modules/.bin/webpack --progress --colors",
     "watch": "yarn build -- --watch",
-    "dist": "yarn build -- -p"
-  },
-  "dependencies": {
-    "chart.js": "^2.6.0",
-    "codemirror": "^5.26.0",
-    "jquery": "2.2.4",
-    "js-cookie": "^2.1.4",
-    "lodash": "^4.17.4",
-    "markdown-core": "^1.1.0"
+    "dist": "yarn build -- -p",
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "publish": "electron-forge publish",
+    "lint": "echo \"No linting configured\""
   },
   "keywords": [
     "markdown",
@@ -24,12 +22,12 @@
     "mdp",
     "tylingsoft"
   ],
+  "author": "Tyler Long",
+  "license": "MIT",
   "files": [
     "src",
     "dist"
   ],
-  "author": "Tyler Long",
-  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tylingsoft/markdown-plus.git"
@@ -38,12 +36,62 @@
     "url": "https://github.com/tylingsoft/markdown-plus/issues"
   },
   "homepage": "https://github.com/tylingsoft/markdown-plus#readme",
+  "config": {
+    "forge": {
+      "packagerConfig": {},
+      "makers": [
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "config": {
+            "name": "markdown_plus"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-dmg",
+          "config": {
+            "format": "ULFO"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-zip",
+          "platforms": [
+            "darwin"
+          ]
+        },
+        {
+          "name": "@electron-forge/maker-deb",
+          "config": {}
+        },
+        {
+          "name": "@electron-forge/maker-rpm",
+          "config": {}
+        }
+      ]
+    }
+  },
+    "dependencies": {
+    "chart.js": "^2.6.0",
+    "codemirror": "^5.26.0",
+    "dlx": "^0.2.1",
+    "electron-squirrel-startup": "^1.0.0",
+    "jquery": "2.2.4",
+    "js-cookie": "^2.1.4",
+    "lodash": "^4.17.4",
+    "markdown-core": "^1.1.0"
+  },
   "devDependencies": {
+    "@electron-forge/cli": "6.0.0-beta.51",
+    "@electron-forge/maker-deb": "6.0.0-beta.51",
+    "@electron-forge/maker-rpm": "6.0.0-beta.51",
+    "@electron-forge/maker-squirrel": "6.0.0-beta.51",
+    "@electron-forge/maker-zip": "6.0.0-beta.51",
+    "@electron-forge/maker-dmg": "6.0.0-beta.51",
     "babel-core": "^6.24.1",
     "babel-loader": "^7.0.0",
     "babel-plugin-transform-remove-strict-mode": "^0.0.2",
     "babel-preset-env": "^1.5.1",
     "css-loader": "^0.28.4",
+    "electron": "8.2.5",
     "extract-text-webpack-plugin": "^2.1.0",
     "standard": "^10.0.2",
     "style-loader": "^0.18.1",
