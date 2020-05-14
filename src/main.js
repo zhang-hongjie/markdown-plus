@@ -1,10 +1,17 @@
 const electron = require('electron')
-const { app, BrowserWindow, Menu } = require('electron')
+const { app, BrowserWindow, Menu, Tray } = require('electron')
 const path = require('path')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the javascript object is garbage collected.
 let mainWindow
+let appIcon = null;
+
+// const app = electron.app;
+const image = electron.nativeImage.createFromPath(
+  path.join(__dirname, '../dist/icon.png')
+);
+app.dock.setIcon(image);
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
@@ -24,7 +31,43 @@ const createWindow = () => {
   // and load the index.html of the app.
   // mainWindow.loadURL('file://' + __dirname + '/index.html');
 }
-
+const createTrayMenu = () => {
+  const iconPath = path.join(__dirname, '../dist/tray_icon.png');
+  appIcon = new Tray(iconPath);
+  var contextMenu = Menu.buildFromTemplate([
+    {
+      label: 'Item1',
+      type: 'radio',
+      icon: iconPath
+    },
+    {
+      label: 'Item2',
+      submenu: [
+        { label: 'submenu1' },
+        { label: 'submenu2' }
+      ]
+    },
+    {
+      label: 'Item3',
+      type: 'radio',
+      checked: true
+    },
+    {
+      label: 'Toggle DevTools',
+      accelerator: 'Alt+Command+I',
+      click: function() {
+        mainWindow.show();
+        mainWindow.toggleDevTools();
+      }
+    },
+    { label: 'Quit',
+      accelerator: 'Command+Q',
+      selector: 'terminate:',
+    }
+  ]);
+  appIcon.setToolTip('This is my application.');
+  appIcon.setContextMenu(contextMenu);
+}
 const createApplicationMenu = () => {
   var application_menu = [
     {
@@ -122,6 +165,7 @@ const createApplicationMenu = () => {
 // Some APIs can only be used after this event occurs.
 app.on('ready', function () {
   createWindow();
+  createTrayMenu();
   createApplicationMenu();
 })
 
