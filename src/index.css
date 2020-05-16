@@ -157,6 +157,17 @@ fblue {
 #FgBlue {
   color: blue;
 }
+/*************************/
+/* new/open/save dialog  */
+/*************************/
+.buttons {
+  padding: 2px;
+  height: 25px;
+}
+
+button {
+  margin: 0;
+}
 
 /*************************/
 /* below is for printing */

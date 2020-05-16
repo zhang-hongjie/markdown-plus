@@ -33,11 +33,11 @@ const rules = [
 ]
 
 const config = {
-  target: 'web',
+  target: 'electron-renderer',
   entry: {
     'index': './src/index.js'
   },
-  externals: 'fs', // in order to make mermaid work
+  // externals: 'fs', // in order to make mermaid work
   output: {
     path: path.join(__dirname, './dist/'),
     filename: '[name].bundle.js'
