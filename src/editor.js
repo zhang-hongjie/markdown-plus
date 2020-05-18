@@ -36,7 +36,6 @@ import 'codemirror/addon/dialog/dialog.js'
 import 'codemirror/addon/search/match-highlighter.js'
 import 'codemirror/addon/search/matchesonscrollbar.js'
 import 'codemirror/addon/selection/active-line.js'
-
 import { syncPreview } from './sync_scroll'
 
 // load all the themes
@@ -111,7 +110,8 @@ let hasWriteAccess
 
 const {remote, clipboard} = require('electron')
 const { Menu, MenuItem, dialog } = remote
-const fs = require('fs')
+//const fs = require('fs')
+import * as fs from 'fs';
 
 function handleDocumentChange (title) {
   var mode = 'javascript'

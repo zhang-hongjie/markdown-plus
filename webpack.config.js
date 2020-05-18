@@ -32,12 +32,19 @@ const rules = [
   }
 ]
 
+// http://www.matthiassommer.it/software-architecture/webpack-node-modules/
 const config = {
   target: 'electron-renderer',
   entry: {
     'index': './src/index.js'
   },
   // externals: 'fs', // in order to make mermaid work
+  externals: {
+    "electron": "require('electron')",
+    "child_process": "require('child_process')",
+    "fs": "require('fs')",
+    "path": "require('path')"
+  },
   output: {
     path: path.join(__dirname, './dist/'),
     filename: '[name].bundle.js'
