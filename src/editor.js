@@ -76,10 +76,26 @@ items.forEach((item) => {
 extraKeys['Tab'] = (cm) => {
   cm.execCommand('indentMore')
 }
-// extraKeys['Ctrl-S'] = (cm) => {
-//   handleSaveButton()
-// }
+extraKeys['Ctrl-N'] = (cm) => {
+  handleNewButton()
+}
+extraKeys['Ctrl-O'] = (cm) => {
+  handleOpenButton()
+}
+extraKeys['Ctrl-S'] = (cm) => {
+  handleSaveButton()
+}
 
+extraKeys['Ctrl-C'] = (cm) => {
+  clipboard.writeText(editor.getSelection(), 'copy')
+}
+extraKeys['Ctrl-X'] = (cm) => {
+  clipboard.writeText(editor.getSelection(), 'copy')
+  editor.replaceSelection('')
+}
+extraKeys['Ctrl-V'] = (cm) => {
+  editor.replaceSelection(clipboard.readText('copy'))
+}
 editor.setOption('extraKeys', extraKeys)
 
 // default implementation of vim commands
