@@ -37,7 +37,7 @@ import 'codemirror/addon/search/match-highlighter.js'
 import 'codemirror/addon/search/matchesonscrollbar.js'
 import 'codemirror/addon/selection/active-line.js'
 import { syncPreview } from './sync_scroll'
-//const fs = require('fs')
+// const fs = require('fs')
 import * as fs from 'fs'
 
 // load all the themes
@@ -115,6 +115,7 @@ const { Menu, MenuItem, dialog } = remote
 
 function handleDocumentChange (title) {
   var mode = 'javascript'
+  // eslint-disable-next-line no-unused-vars
   var modeName = 'JavaScript'
   if (title) {
     title = title.match(/[^/]+$/)[0]
@@ -193,7 +194,7 @@ function handleOpenButton () {
     properties: ['openFile']
   }).then(result => {
     if (result.canceled === false) {
-      console.log("handleOpenButton: Selected file paths:" + result.filePaths)
+      console.log('handleOpenButton: Selected file paths:' + result.filePaths)
       onChosenFileToOpen(result.filePaths[0])
     }
   }).catch(err => {
@@ -208,7 +209,7 @@ function handleSaveButton () {
     dialog.showSaveDialog(remote.getCurrentWindow())
     .then(result => {
       if (result.canceled === false) {
-        console.log("handleOpenButton: Selected file paths:" + result.filePath)
+        console.log('handleOpenButton: Selected file paths:' + result.filePath)
         onChosenFileToSave(result.filePath, true)
       }
     }).catch(err => {
@@ -245,18 +246,6 @@ function initContextMenu () {
   }, false)
 }
 
-function onresize () {
-  var container = document.getElementById('editor')
-  var containerWidth = container.offsetWidth
-  var containerHeight = container.offsetHeight
-
-  var scrollerElement = editor.getScrollerElement()
-  scrollerElement.style.width = containerWidth + 'px'
-  scrollerElement.style.height = containerHeight + 'px'
-
-  editor.refresh()
-}
-
 initContextMenu()
 
 newButton = document.getElementById('new')
@@ -267,6 +256,21 @@ newButton.addEventListener('click', handleNewButton)
 openButton.addEventListener('click', handleOpenButton)
 saveButton.addEventListener('click', handleSaveButton)
 
-// onresize()
-
 export default editor
+
+// function onresize () {
+//   console.log('resize')
+//   const container = document.getElementById('editor')
+//   const containerWidth = container.offsetWidth
+//   const containerHeight = container.offsetHeight
+//
+//   const scrollerElement = editor.getScrollerElement()
+//   scrollerElement.style.width = containerWidth + 'px'
+//   scrollerElement.style.height = containerHeight + 'px'
+//
+//   editor.refresh()
+// }
+// window.addEventListener('resize', function (ev) {
+//   ev.preventDefault()
+//   onresize()
+// }, false)
