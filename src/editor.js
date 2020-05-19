@@ -37,6 +37,8 @@ import 'codemirror/addon/search/match-highlighter.js'
 import 'codemirror/addon/search/matchesonscrollbar.js'
 import 'codemirror/addon/selection/active-line.js'
 import { syncPreview } from './sync_scroll'
+//const fs = require('fs')
+import * as fs from 'fs'
 
 // load all the themes
 export const themes = ['3024-day', '3024-night', 'abcdef', 'ambiance-mobile', 'ambiance', 'base16-dark', 'base16-light', 'bespin', 'blackboard', 'cobalt', 'colorforth', 'dracula', 'duotone-dark', 'duotone-light', 'eclipse', 'elegant', 'erlang-dark', 'hopscotch', 'icecoder', 'isotope', 'lesser-dark', 'liquibyte', 'material', 'mbo', 'mdn-like', 'midnight', 'monokai', 'neat', 'neo', 'night', 'panda-syntax', 'paraiso-dark', 'paraiso-light', 'pastel-on-dark', 'railscasts', 'rubyblue', 'seti', 'solarized', 'the-matrix', 'tomorrow-night-bright', 'tomorrow-night-eighties', 'ttcn', 'twilight', 'vibrant-ink', 'xq-dark', 'xq-light', 'yeti', 'zenburn']
@@ -110,15 +112,13 @@ let hasWriteAccess
 
 const {remote, clipboard} = require('electron')
 const { Menu, MenuItem, dialog } = remote
-//const fs = require('fs')
-import * as fs from 'fs';
 
 function handleDocumentChange (title) {
   var mode = 'javascript'
   var modeName = 'JavaScript'
   if (title) {
     title = title.match(/[^/]+$/)[0]
-    document.getElementById('title').innerHTML = title
+    // document.getElementById('title').innerHTML = title
     document.title = title
     if (title.match(/.json$/)) {
       mode = {name: 'javascript', json: true}
@@ -131,10 +131,10 @@ function handleDocumentChange (title) {
       modeName = 'CSS'
     }
   } else {
-    document.getElementById('title').innerHTML = '[no document loaded]'
+    // document.getElementById('title').innerHTML = '[no document loaded]'
   }
   editor.setOption('mode', mode)
-  document.getElementById('mode').innerHTML = modeName
+  // document.getElementById('mode').innerHTML = modeName
 }
 
 function newFile () {
@@ -184,19 +184,20 @@ var onChosenFileToSave = function (theFileEntry) {
 }
 
 function handleNewButton () {
-  console.log('call new')
-  window.alert('new')
-  if (false) {
-    newFile()
-    editor.setValue('')
-  } else {
-    window.open('file://' + __dirname + '/index.html')
-  }
+  newFile()
+  editor.setValue('')
 }
 
 function handleOpenButton () {
-  dialog.showOpenDialog({properties: ['openFile']}, function (filename) {
-    onChosenFileToOpen(filename.toString())
+  dialog.showOpenDialog(remote.getCurrentWindow(), {
+    properties: ['openFile']
+  }).then(result => {
+    if (result.canceled === false) {
+      console.log("handleOpenButton: Selected file paths:" + result.filePaths)
+      onChosenFileToOpen(result.filePaths[0])
+    }
+  }).catch(err => {
+    console.log(err)
   })
 }
 
@@ -204,8 +205,14 @@ function handleSaveButton () {
   if (fileEntry && hasWriteAccess) {
     writeEditorToFile(fileEntry)
   } else {
-    dialog.showSaveDialog(function (filename) {
-      onChosenFileToSave(filename.toString(), true)
+    dialog.showSaveDialog(remote.getCurrentWindow())
+    .then(result => {
+      if (result.canceled === false) {
+        console.log("handleOpenButton: Selected file paths:" + result.filePath)
+        onChosenFileToSave(result.filePath, true)
+      }
+    }).catch(err => {
+      console.log(err)
     })
   }
 }
@@ -250,7 +257,7 @@ function onresize () {
   editor.refresh()
 }
 
-// initContextMenu()
+initContextMenu()
 
 newButton = document.getElementById('new')
 openButton = document.getElementById('open')
